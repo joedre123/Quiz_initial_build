@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="{% static 'quiz/styles/base.css' %}">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .banner {
+            background-color: #007bff;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #444;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        h2 {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .quiz-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .quiz-description {
+            color: #666;
+            margin-top: 5px;
+        }
+        .header-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+            <a href="{{ register_url }}" class="button">Register</a>
+            <a href="{{ login_url }}" class="button">Login</a>
+            <a href="{{ leaderboard_url }}" class="button">Leaderboard</a>
+    </div>
+        <div class="container">
+        <h1>Welcome to the Quiz Page</h1>
+        <!-- <img src="{% static 'quiz/images/exam.jpg' %}" alt="Quiz Image" class="header-image"> -->
+        <h2>Available Quizzes</h2>
+        <ul class="quiz-list">
+            {% for item in quiz_items %}
+                <li class="quiz-item">
+                    <a href="{{ item.path }}" class="quiz-link">{{ item.name }}</a>
+                    <p class="quiz-description">{{ item.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

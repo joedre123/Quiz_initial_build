@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="{% static 'quiz/styles/base.css' %}">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .banner {
+            background-color: #007bff;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* Added */
+        }
+
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .quiz-item {
+            margin-bottom: 10px;
+        }
+
+        .quiz-link {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .quiz-description {
+            color: #666;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #444;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="banner">
+    <a href="{{ home_url }}" class="button">Home</a>
+  </div>
+    <div class="container">
+        <h1>{{ quiz.capitalize }} Quiz</h1>
+
+        {% if submitted %}
+        <h2>Quiz Results - {{ percentage_correct }}%</h2>
+        <ul>
+            {% for answer in answers %}
+            <li>
+                <p><strong>Question:</strong> {{ answer.question }}</p>
+                <p><strong>Your Answer:</strong> {{ answer.user_answer }}</p>
+                <p><strong>Correct Answer:</strong> {{ answer.correct_answer }}</p>
+                {% if answer.is_correct %}
+                <span class="correct">Correct!</span>
+                {% else %}
+                <span class="incorrect">Incorrect.</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <form method="post" action="{% url 'quiz' quiz.lower %}">
+            {% csrf_token %}
+            <ul>
+                {% for item in quiz_data %}
+                {% if item.Category|capfirst == quiz|capfirst %}
+                <li>
+                    <p>{{ item.Question }}</p>
+                    <input type="text" name="answer_{{ forloop.counter }}">
+                    <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ item.id }}">
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="btn-container">
+                <button type="submit">Submit Answers</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+{% load static %}
+<!-- Loads static files template so I can use CSS, JD, images etc -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="{% static 'quiz/styles/base.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .quiz-item {
+            margin-bottom: 10px;
+        }
+        .quiz-link {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .quiz-description {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+  <h1>This is the {{ quiz.capitalize }} quiz</h1>
+  
+  {% if submitted %}
+  <!-- When form is submitted a list is created showing the correct answers, given answers and result -->
+    <h2>Quiz Results - {{ percentage_correct }}%</h2>
+      <ul>
+          {% for answer in answers %}
+              <li>
+                  Question: {{ answer.question }}<br>
+                  Your Answer: {{ answer.user_answer }}<br>
+                  Correct Answer: {{ answer.correct_answer }}<br>
+                  {% if answer.is_correct %}
+                      <span style="color: green;">Correct!</span>
+                  {% else %}
+                      <span style="color: red;">Incorrect.</span>
+                  {% endif %}
+              </li>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <form method="post" action="{% url 'quiz' quiz.lower %}">
+          {% csrf_token %}
+          <ul>
+              {% for item in quiz_data %}
+                  {% if item.Category|capfirst == quiz|capfirst %}
+                      <li>
+                          {{ item.Question }}
+                          <br>
+                          Your Answer: <input type="text" name="answer_{{ forloop.counter }}">
+                          <input type="hidden" name="question_id_{{ forloop.counter }}" value="{{ item.id }}">
+                      </li>
+                  {% endif %}
+              {% endfor %}
+          </ul>
+          <button type="submit">Submit Answers</button>
+      </form>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!-- templates/quiz/leaderboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #007bff;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* Added */
+        }
+
+        .leaderboard {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .leaderboard h2 {
+            text-align: center;
+        }
+        .leaderboard table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .leaderboard th, .leaderboard td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        .leaderboard th {
+            background-color: #f4f4f4;
+        }
+
+        .filter-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-form select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <a href="{{ home_url }}" class="button">Home</a>
+    </div>
+     <div class="leaderboard"> <!-- This calls the styling seen above -->
+        <h2>Leaderboard</h2>
+        <div class="filter-form">
+             <form method="get"> <!-- This is required to get the results data from the server -->
+                <label for="category">Filter by Category:</label>
+                <select name="category" id="category" onchange="this.form.submit()"> <!-- Creates drop down menu. Onchange automatically submits without the user clicking a button -->
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Quiz Category</th>
+                    <th>Percentage Correct</th>
+                    <th>Date Taken</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.user.username }}</td>
+                        <td>{{ result.quiz_category }}</td>
+                        <td>{{ result.percentage_correct }}%</td>
+                        <td>{{ result.date_taken }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
